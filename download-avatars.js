@@ -11,9 +11,9 @@ if (repoOwner === undefined || repoName === undefined) {
   throw new Error("Please enter the repo owner and then the repo name.");
 }
 
-console.log('Starting downloads...');
-
 getRepoContributors(repoOwner, repoName, function(err, result) {
+
+  console.log('Starting downloads...');
 
   for (var contributor of result){
   //Iterate through the JSON object
