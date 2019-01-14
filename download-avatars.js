@@ -8,16 +8,23 @@ var input = process.argv.slice(2);
 var repoOwner = input[0];
 var repoName = input[1];
 
-getRepoContributors(repoOwner, repoName, function(err, result) {
-  console.log("Errors:", err);
-  for (var contributor of result){ //Iterate through the JSON object
+//Make sure two fields have been entered. Call function if true.
+if (repoOwner === undefined || repoName === undefined) {
+  console.log("Please enter both the repo owner, and the repo name.");
+} else {
+
+  getRepoContributors(repoOwner, repoName, function(err, result) {
+
+    console.log("Errors:", err);
+    for (var contributor of result){ //Iterate through the JSON object
       var filePath = './avatars/'; //file path to download images
 
-      //download images from their URL to a designated file path.
+      //Download images from their URL to a designated file path.
       //Name the files after the user's login name.
       downloadImageByURL(contributor.avatar_url, filePath + contributor.login);
-  }
-});
+    }
+  });
+}
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
