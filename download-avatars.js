@@ -63,17 +63,20 @@ function downloadImageByURL(url, userLogin) {
 
   let fileName = filePath + userLogin;
 
-  //console.log(fileType(url).ext);
   var requestSettings = {
     method: 'GET',
     url: url,
     encoding: null
   };
+  //Create request setting object
 
   request(requestSettings, function(error, response, body){
     var fileInfo = fileType(body);
+    //Object with file extension as first key
     var fullFileName = fileName + "." + fileInfo.ext;
+    //create file name with extension (ex .jpg)
     fs.writeFile(fullFileName, body, function(err){return err;});
+    //write the file to local file.
     console.log("Download Complete");
   });
 }
