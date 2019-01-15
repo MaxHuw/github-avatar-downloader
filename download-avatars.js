@@ -1,6 +1,7 @@
 var request = require('request');
 var fs = require('fs');
 var secrets = require('./secrets');
+var fileType = require('file-type');
 
 var input = process.argv.slice(2);
 var repoOwner = input[0];
@@ -62,19 +63,17 @@ function downloadImageByURL(url, userLogin) {
 
   let fileName = filePath + userLogin;
 
+  //console.log(fileType(url).ext);
+  var requestSettings = {
+    method: 'GET',
+    url: url,
+    encoding: null
+  };
 
-  request.get(url)
-    .on('error', function(err) {
-      throw err;
-    })
-    .on('response', function(response){
-
-      response.on('end', function(){
-        console.log("Download Complete!");
-        //Notify user when an image has been downloaded.
-      });
-
-    })
-    .pipe(fs.createWriteStream(fileName));
-    //Downloads image to set directory
-};
+  request(requestSettings, function(error, response, body){
+    var fileInfo = fileType(body);
+    var fullFileName = fileName + "." + fileInfo.ext;
+    fs.writeFile(fullFileName, body, function(err){return err;});
+    console.log("Download Complete");
+  });
+}
