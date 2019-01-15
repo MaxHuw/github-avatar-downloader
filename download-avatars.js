@@ -2,6 +2,7 @@ var request = require('request');
 var fs = require('fs');
 var secrets = require('./secrets');
 var fileType = require('file-type');
+var dotenv = require('dotenv').config();
 
 var input = process.argv.slice(2);
 var repoOwner = input[0];
@@ -32,7 +33,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': 'request',
-      'Authorization': secrets.GITHUB_TOKEN
+      'Authorization': dotenv.GITHUB_TOKEN
     }
   };
 

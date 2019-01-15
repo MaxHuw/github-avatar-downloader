@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MaxHuw/github-avatar-downloader#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "file-type": "^10.7.0",
     "request": "^2.88.0"
   }
