@@ -13,15 +13,12 @@ if (repoOwner === undefined || repoName === undefined) {
 
 getRepoContributors(repoOwner, repoName, function(err, result) {
 
-  console.log('Starting downloads...');
+  console.log('Starting Downloads...');
 
   for (var contributor of result){
   //Iterate through the JSON object
 
-    var filePath = './avatars/';
-    //file path to download images
-
-    downloadImageByURL(contributor.avatar_url, filePath + contributor.login);
+    downloadImageByURL(contributor.avatar_url, contributor.login);
     //Download images from their URL to a designated file path.
     //Name the files after the user's login name.
   }
@@ -30,7 +27,7 @@ getRepoContributors(repoOwner, repoName, function(err, result) {
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
-  var options = {
+  let options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': 'request',
@@ -46,14 +43,25 @@ function getRepoContributors(repoOwner, repoName, cb) {
     //Check to make sure the data is accessed.
     //Throw an error if it is not accessable.
 
-    var results = JSON.parse(body);
+    let results = JSON.parse(body);
     //Parse body into JSON
     cb(err, results);
   });
 }
 
 
-function downloadImageByURL(url, filePath) {
+function downloadImageByURL(url, userLogin) {
+
+  let filePath = './avatars/';
+  //file path to download images
+
+  if (!fs.existsSync(filePath)){
+    fs.mkdirSync(filePath);
+  }
+  //Check to see if folder exist. If not, create it.
+
+  let fileName = filePath + userLogin;
+
 
   request.get(url)
     .on('error', function(err) {
@@ -67,6 +75,6 @@ function downloadImageByURL(url, filePath) {
       });
 
     })
-    .pipe(fs.createWriteStream(filePath));
+    .pipe(fs.createWriteStream(fileName));
     //Downloads image to set directory
 };
