@@ -29,15 +29,30 @@ getRepoContributors(repoOwner, repoName, function(err, result) {
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
+  if (!fs.existsSync('./.env')) {
+    throw new Error(".env file is missing. Cannot access necessary information");
+  }
+  //Check if .env file exists.
+
+  if (process.env.GITHUB_TOKEN === undefined) {
+    throw new Error("Information missing from .env file.");
+  }
+  //Check if required key exists within .env file.
+
   let options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': 'request',
-      'Authorization': dotenv.GITHUB_TOKEN
+      'Authorization': 'token ' + process.env.GITHUB_TOKEN
     }
   };
 
   request(options, function(err, res, body) {
+
+    if(res.statusCode === 401){
+      throw new Error("Incorrct github token. Please verify");
+    }
+    //statuscode = 401 if token is incorrect, throw error.
 
     if(res.statusCode !== 200){
       throw new Error("Cannot access Github repo. Check that you entered the correct repo and owner.");
