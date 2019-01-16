@@ -1,8 +1,10 @@
+require('dotenv').config();
+
+
 var request = require('request');
 var fs = require('fs');
 var secrets = require('./secrets');
 var fileType = require('file-type');
-var dotenv = require('dotenv').config();
 
 var input = process.argv.slice(2);
 var repoOwner = input[0];
